@@ -1,0 +1,81 @@
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    height: 60%;
+}
+
+body, div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+div {
+    margin-top: 32px;
+    gap: 32px;
+    width: 50%;
+    align-self: center;
+    text-align: center;
+    flex-basis: 100px;
+    flex-wrap: wrap;
+}
+
+ul {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding-left: 0;
+}
+
+li {
+    list-style: none;
+}
+
+/* Botones */
+button {
+    padding: 16px 32px;
+    border: 2px dashed rgb(100, 100, 255);
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: rgb(240, 240, 240);
+}
+
+button:hover {
+    background-color: rgb(240, 255, 205);
+}
+
+button:active {
+    background-color: rgb(221, 255, 141);
+}
+
+/* Cajas de aviso*/
+
+#aviso, #puntaje, #partida, #resultados {
+    padding: 32px;
+    border: 2px solid black;
+    border-radius: 6px;
+    font-size: 24px;
+}
+
+#aviso {
+    background-color:rgb(245, 255, 130);
+    font-style: italic;
+    white-space: pre-line;
+}
+
+#puntaje {
+    background-color:rgb(130, 255, 149);
+}
+
+#partida {
+    background-color:rgb(130, 247, 255);
+}
+
+#resultados {
+    background-color:rgb(130, 143, 255);
+    font-weight: bold;
+}
