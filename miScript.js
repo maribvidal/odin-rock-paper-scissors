@@ -1,8 +1,72 @@
 "use strict"
 
+//  - Inicialización de variables
+
+let humanScore = 0;
+let computerScore = 0;
+let gameFinished = false;
+
+//  - Creación y selección de elementos
+
+const list = document.querySelector("ul");
+
+const log = document.querySelector("#aviso");
+const scores = document.querySelector("#puntaje");
+const game = document.querySelector("#partida");
+const result = document.querySelector("#resultados");
+
+const listElemRock = document.createElement("li");
+const listElemPaper = document.createElement("li");
+const listElemScissors = document.createElement("li");
+
+// Botones
+
+const rockBtn = document.createElement("button");
+const paperBtn = document.createElement("button");
+const scissorsBtn = document.createElement("button");
+
+rockBtn.id = "rock";
+rockBtn.textContent = "Rock";
+
+paperBtn.id = "paper";
+paperBtn.textContent = "Paper";
+
+scissorsBtn.id = "scissors";
+scissorsBtn.textContent = "Scissors";
+
+// Anexarlos a la lista
+
+listElemRock.appendChild(rockBtn);
+listElemPaper.appendChild(paperBtn);
+listElemScissors.appendChild(scissorsBtn);
+
+list.appendChild(listElemRock);
+list.appendChild(listElemPaper);
+list.appendChild(listElemScissors);
+
 //  - Lógica del programa
 
-playGame();
+list.addEventListener("click", (event) => {
+    let target = event.target;
+
+    // Aquí aprovechamos el "event bubbling" para delegar eventos a un solo event handler
+    if (target.id != "") {
+        if (!gameFinished) {
+            if (target.id === "rock" || target.id === "paper" || target.id === "scissors") {
+                playRound(getComputerChoice(), target.id);
+                showScore();
+                compareScores();
+
+                if (gameFinished)
+                    showResult();
+            }   else {
+                log.textContent = "That's not a correct option";
+            }
+        }   else {
+            log.textContent = "Game has already finished!";
+        }
+    }
+});
 
 //  - Funciones
 
@@ -12,102 +76,87 @@ function getComputerChoice() {
     
     switch (numeroAlAzar) {
         case 1:
-            decision = "piedra";
+            decision = "rock";
             break;
 
         case 2:
-            decision = "papel";
+            decision = "paper";
             break;
     
         default:
-            decision = "tijera";
+            decision = "scissors";
             break;
-    }
-
-    return decision;
-}
-
-function getHumanChoice() {
-    let decision = "";
-    let inputValido = false;
-
-    while (!inputValido) {
-        decision = prompt("Elija piedra, papel o tijera", "piedra").toLowerCase();
-
-        //Comprobar su decisión
-        if (decision === "piedra" || decision === "papel" || decision === "tijera") {
-            inputValido = true;
-        } else {
-            alert("¡Ingrese una palabra válida!");
-        }
     }
 
     return decision;
 }
 
 function playRound(computerChoice, humanChoice) {
-    alert(`La computadora sacó: ${computerChoice}
-        El jugador sacó: ${humanChoice}`);
+    log.textContent = `The computer used: ${computerChoice} \r\nThe player used: ${humanChoice}`;
 
     switch (computerChoice) {
-        case "piedra":
-            if (humanChoice === "papel") {
-                alert("El papel pasa por debajo de la piedra");
+        case "rock":
+            if (humanChoice === "paper") {
+                game.textContent = "Paper slips under rock";
                 humanScore++;
-            } else if (humanChoice === "tijera") {
-                alert("La piedra aplasta la tijera");
+            } else if (humanChoice === "scissors") {
+                game.textContent = "Rock smashes scissors";
                 computerScore++;
             } else {
-                alert("Hay empate");
+                game.textContent = "Draw";
             }
             break;
 
-        case "papel":
-            if (humanChoice === "piedra") {
-                alert("El papel pasa por debajo de la piedra");
+        case "paper":
+            if (humanChoice === "rock") {
+                game.textContent = "Paper slips under rock";
                 computerScore++;
-            } else if (humanChoice === "tijera") {
-                alert("La tijera corta al papel");
+            } else if (humanChoice === "scissors") {
+                game.textContent = "Scissors cut paper";
                 humanScore++;
             } else {
-                alert("Hay empate");
+                game.textContent = "Draw";
             }
             break;
 
-        case "tijera":
-            if (humanChoice === "piedra") {
-                alert("La piedra aplasta la tijera");
+        case "scissors":
+            if (humanChoice === "rock") {
+                game.textContent = "Rock smashes scissors";
                 humanScore++;
-            } else if (humanChoice === "papel") {
-                alert("La tijera corta al papel");
+            } else if (humanChoice === "paper") {
+                game.textContent = "Scissors cut paper";
                 computerScore++;
             } else {
-                alert("Hay empate");
+                game.textContent = "Draw";
             }
             break;
 
         default:
-            alert("Esa no es una opción válida");
+            log.textContent = "That's not a valid option";
             break;
     }
 }
 
-function playGame() {
-    let humanScore = 0;
-    let computerScore = 0;
-    let roundNumber = 0;
+function showScore() {
+    scores.textContent = `(${humanScore} - ${computerScore})`;
+}
 
-    while (roundNumber < 5) {
-        alert(` RONDA NÚMERO ${roundNumber} `)
-        playRound(getComputerChoice(), getHumanChoice());
-        roundNumber++;
+function compareScores() {
+    if (!gameFinished) {
+        if (humanScore >= 5 || computerScore >= 5)
+            gameFinished = true;
     }
+}
 
+function showResult() {
+    // Revisar el puntaje
     if (humanScore > computerScore) {
-        alert("Ha ganado el usuario");
+        result.textContent = "User wins!";
     } else if (computerScore > humanScore) {
-        alert("Ha ganado la computadora");
+        result.textContent = "Computer wins!";
     } else {
-        alert("Hubo empate");
+        result.textContent = "Draw!";
     }
+
+    showScore();
 }
